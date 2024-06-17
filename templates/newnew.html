@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Weather Prediction</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+    <style type="text/css">
+        /* Reset some default styling */
+        body, h1, form, p, div {
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Basic styling */
+        .container {
+            width: 100%;
+            text-align: center;
+        }
+
+        .background {
+            background-image: url('https://www.snexplores.org/wp-content/uploads/2019/11/860_main_weather_and_prediction.png');
+            position: relative;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            height: 550px;
+        }
+
+        .content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40%;
+            padding: 20px;
+            text-align: center;
+            max-height: 300px;
+            background-color: rgba(255, 255, 255, 0.8);
+        }
+
+        .container form {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 20px;
+            border-radius: 5px;
+        }
+
+        .container .btn {
+            margin-top: 10px;
+        }
+
+        form {
+            margin-top: 10px;
+            text-align: left;
+        }
+
+        label {
+            display: inline-block;
+            width: 150px;
+            text-align: right;
+            margin-right: 10px;
+        }
+
+        .btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+
+        
+
+        .prediction-box {
+        background-color: rgba(255, 255, 255, 0.8);
+        padding: 10px;
+        margin-top: 10px;
+        border-radius: 5px;
+        max-height: 100px; /* Set a maximum height for the prediction box */
+        overflow-y: auto; /* Add scrollbars if content exceeds the max height */
+    }
+
+    .prediction {
+        font-weight: bold;
+        color: #007bff;
+    }
+
+        /* Define the background images for each weather condition */
+        .drizzle {
+            background-image: url('https://arynews.tv/wp-content/uploads/2021/06/karachi-rain-750x369-1.jpg');
+        }
+
+        .rain {
+            background-image: url('https://cdn.wallpapersafari.com/64/80/2rX4s3.png');
+        }
+
+        .sun {
+            background-image: url('https://images.pexels.com/photos/1033716/pexels-photo-1033716.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
+        }
+
+        .snow {
+            background-image: url('https://ewscripps.brightspotcdn.com/dims4/default/c85653f/2147483647/strip/true/crop/1280x720+0+0/resize/1280x720!/quality/90/?url=http%3A%2F%2Fewscripps-brightspot.s3.amazonaws.com%2F9c%2F75%2Fee0b9f3142a0a63f6c4ec8d49250%2Fkm8.png');
+        }
+
+        .fog {
+            background-image: url('https://images.unsplash.com/photo-1604896787809-5f3082b014de?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bW9ybmluZyUyMGZvZ3xlbnwwfHwwfHx8MA%3D%3D&w=1000&q=80');
+        }
+    </style>
+</head>
+<body>
+<div class="w3-sidebar w3-bar-block w3-border-right" style="display:none" id="mySidebar">
+    <button onclick="w3_close()" class="w3-bar-item w3-large">Close &times;</button>
+    <a href="index3.html" class="w3-bar-item w3-button">About the Model</a>
+</div>
+
+<div class="container">
+    <div class="background">
+        <div class="content">
+            <form action="/predict" method="post">
+                <div class="form-group" style="display: flex; flex-direction: row;">
+                    <label for="precipitation">Precipitation:</label>
+                    <input type="text" name="precipitation" id="precipitation"><br>
+                </div>
+                <div class="form-group" style="display: flex; flex-direction: row;">
+                    <label for="temp_max">Max Temp:</label>
+                    <input type="text" name="temp_max" id="temp_max"><br>
+                </div>
+                <div class="form-group" style="display: flex; flex-direction: row;">
+                    <label for="temp_min">Min Temp:</label>
+                    <input type="text" name="temp_min" id="temp_min"><br>
+                </div>
+                <div class="form-group" style="display: flex; flex-direction: row;">
+                    <label for="wind">Wind Speed:</label>
+                    <input type="text" name="wind" id="wind"><br>
+                </div>
+                <input type="submit" value="Predict" class="btn">
+            </form>
+            <div class="prediction-box">
+                {% if prediction %}
+                <p class="prediction">Predicted Weather: {{ prediction }}</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function changeBackground(weather) {
+        const background = document.querySelector('.background');
+        background.className = 'background ' + weather;
+    }
+    {% if prediction %}
+    changeBackground('{{ prediction.lower() }}');
+    {% endif %}
+</script>
+
+<div class="w3-container">
+    <h3 style="font-weight: bold;">NAIVE BAYES</h3>
+    <p style="text-align: center;">
+    <img src="https://discovery.cs.illinois.edu/static/learn/03/bayes-rule-ex1.png" alt="Sample Image" style="width: 300px; height: auto;">
+    <br>
+  </p>
+  <br>
+  <p>To make predictions about weather conditions based on historical data which operates on the principles of Bayes' theorem<br>
+
+In the context of weather prediction, the algorithm calculates the probability of a certain weather outcome (like <span style="font-weight:bold"> rain, sunny, cloudy,drizzle </span>) given the observed conditions or features (such as <span style="font-weight:bold">temperature, precipitation, wind speed,</span> etc.). It does this by combining posterior probabilities (probability of certain weather outcomes based on historical data) and likelihoods (how likely certain conditions are given a particular weather outcome). By selecting the weather outcome with the highest probability, Naive Bayes can predict the most probable weather conditions for a given set of observed features.</p>
+</div>
+
+<br>
+<br>
+<br>
+<div class="w3-container">
+  <h4 style="font-weight: bold;">Steps</h4>
+  <p>We make use of Guassian NB classifier<br></p>
+  <p>STEP 1: Import Libraries (Pandas,Sklearn,Joblib)<br>
+  STEP 2: Load Data set (seatle-weather.csv)<br>
+  STEP 3: Label Encoding to Test and Train model<br>
+  STEP 4: Initialize and train the Gaussian Naive Bayes model<br>
+  STEP 5: Using Joblib,we save the state of data, trained models to use in further process<br></p>
+</div>
+</body>
+</html>
